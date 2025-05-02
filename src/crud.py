@@ -1,10 +1,11 @@
 # Methods contained are meant to provide CRUD interaction with the movie database (data/movies.py)
 from data.movies import movies
 
-def list_movies():
-    # lists the number of movies, as well as their title and rating
-
-    pass
+def list_movies() -> None:
+    """lists the number of movies, as well as their title and rating"""
+    print(f"{len(movies)} movies in total")
+    for movie, rating in movies.items():
+        print(f"{movie}: {rating}")
 
 
 def add_movie():
