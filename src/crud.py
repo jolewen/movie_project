@@ -10,8 +10,6 @@ def list_movies() -> None:
 
 def add_movie(movie: str, rating: float) -> None:
     # add a movie to the db
-    """Ask the user to enter a movie name and a rating.
-    There is no need to validate the input (assume that the rating is a number between 1-10)."""
     movies[movie] = rating
 
 
@@ -23,14 +21,16 @@ def delete_movie(title: str) -> None:
     pass
 
 
-def update_movie():
+def update_movie(title: str, new_rating: float) -> None:
     # update the rating of a movie
     """Ask the user to enter a movie name, and then check if it exists.
     If the movie doesn’t exist prints an error message.
-    If it exist, ask the user to enter a new rating,
+    If it exists, ask the user to enter a new rating,
     and update the movie’s rating in the database.
     There is no need to validate the input."""
-    pass
+    movie = movies.get(title, None)
+    if movie:
+        movies[title] = new_rating
 
 
 def print_random_movie():
