@@ -1,4 +1,4 @@
-movies = {
+movies: dict = {
   "The Shawshank Redemption": 9.5,
   "Pulp Fiction": 8.8,
   "The Room": 3.6,
