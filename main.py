@@ -1,0 +1,1 @@
+# Run the CLI to interact with the movie database

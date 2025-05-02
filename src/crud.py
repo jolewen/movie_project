@@ -1,0 +1,1 @@
+# Methods contained are meant to provide CRUD interaction with the movie database (data/movies.py)

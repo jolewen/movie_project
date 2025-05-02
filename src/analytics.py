@@ -1,0 +1,1 @@
+# Methods to receive basic analytics about the movie database
