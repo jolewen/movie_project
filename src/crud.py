@@ -8,14 +8,14 @@ def list_movies() -> None:
         print(f"{movie}: {rating}")
 
 
-def add_movie():
+def add_movie(movie: str, rating: float) -> None:
     # add a movie to the db
     """Ask the user to enter a movie name and a rating.
     There is no need to validate the input (assume that the rating is a number between 1-10)."""
-    pass
+    movies[movie] = rating
 
 
-def delete_movie():
+def delete_movie(title: str) -> None:
     # remove movie from db
     """Ask the user to enter a movie name, and delete it.
     If the movie doesn’t exist in the database, print an error message,
