@@ -11,9 +11,9 @@ Print statistics about the movies in the database:
 """
 
 
-def print_movies_by_rating():
-    """Print all the movies and their ratings, in descending order by the rating."""
-    pass
+def get_movies_by_rating():
+    """Sort movies in descending order by the rating."""
+    return sorted(movies, key=movies.get, reverse=True)
 
 
 def calculate_average_rating():
@@ -35,15 +35,15 @@ def calculate_median_rating():
 
 
 def get_max_rated_movie():
-    best_movie = max(movies, key=movies.get)
-    rating = movies[best_movie]
-    return best_movie, rating
+    max_rating = max(movies.values())
+    best_movies = [movie for movie, rating in movies.items() if rating == max_rating]
+    return best_movies, max_rating
 
 
 def get_min_rated_movie():
-    worst_movie = min(movies, key=movies.get)
-    rating = movies[worst_movie]
-    return worst_movie, rating
+    min_rating = min(movies.values())
+    worst_movies = [movie for movie, rating in movies.items() if rating == min_rating]
+    return worst_movies, min_rating
 
 
 if __name__ == '__main__':
