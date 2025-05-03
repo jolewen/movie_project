@@ -1,7 +1,6 @@
 # Methods to receive basic analytics about the movie database
 from data.movies import movies
 
-
 """Stats
 Print statistics about the movies in the database:
 * Average rating in the database.
@@ -18,8 +17,7 @@ def get_movies_by_rating():
 
 def calculate_average_rating():
     """Calculate the average rating of a movie."""
-    return sum(movies.values())/len(movies)
-
+    return sum(movies.values()) / len(movies)
 
 
 def calculate_median_rating():
@@ -47,7 +45,7 @@ def get_min_rated_movie():
 
 
 if __name__ == '__main__':
-    print_movies_by_rating()
+    get_movies_by_rating()
     # calculate_average_rating()
     # calculate_median_rating()
     # get_max_rated_movies(3)

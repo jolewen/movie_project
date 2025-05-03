@@ -1,6 +1,7 @@
 # Methods contained are meant to provide CRUD interaction with the movie database (data/movies.py)
 from data.movies import movies
 
+
 def list_movies() -> None:
     """lists the number of movies, as well as their title and rating"""
     print(f"{len(movies)} movies in total")
@@ -8,7 +9,24 @@ def list_movies() -> None:
         print(f"{movie}: {rating}")
 
 
-def get_movie_by_index(idx):
+def find_movie_by_name(part_of_name: str):
+    """Ask the user to enter a part of a movie name, and then search all the movies in the database
+    and prints all the movies that matched the user’s query, along with the rating.
+    NOTE: the search should be case-insensitive.
+
+    EXAMPLE:
+    Enter part of movie name: the
+    The Shawshank Redemption, 9.5
+    The Room, 3.6
+    """
+    found_movies = [key for key in movies.keys() if part_of_name in key]
+    if found_movies:
+        print(found_movies)
+    else:
+        print('Not found.')
+
+
+def find_movie_by_index(idx):
     movie = list(movies.keys())[idx]
     return movie
 
@@ -36,28 +54,6 @@ def update_movie(title: str, new_rating: float) -> None:
     movie = movies.get(title, None)
     if movie:
         movies[title] = new_rating
-
-
-def print_random_movie():
-    """Print a random movie and it’s rating."""
-    pass
-
-
-def find_movie_by_name(part_of_name: str):
-    """Ask the user to enter a part of a movie name, and then search all the movies in the database
-    and prints all the movies that matched the user’s query, along with the rating.
-    NOTE: the search should be case-insensitive.
-
-    EXAMPLE:
-    Enter part of movie name: the
-    The Shawshank Redemption, 9.5
-    The Room, 3.6
-    """
-    found_movies = [key for key in movies.keys() if part_of_name in key]
-    if found_movies:
-        print(found_movies)
-    else:
-        print('Not found.')
 
 
 if __name__ == '__main__':
