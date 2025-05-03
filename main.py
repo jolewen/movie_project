@@ -6,7 +6,8 @@ from src.analytics import (calculate_median_rating,
                            calculate_average_rating,
                            get_max_rated_movie,
                            get_min_rated_movie,
-                           get_movies_by_rating)
+                           get_movies_by_rating,
+                           histogram_ratings)
 from src.crud import (list_movies,
                       find_movie_by_index,
                       find_movie_by_full_title,
@@ -26,7 +27,8 @@ class CLI:
                      5: self.stats_flow,
                      6: self.random_movie_flow,
                      7: self.search_movie_flow,
-                     8: self.movies_by_rating_flow}
+                     8: self.movies_by_rating_flow,
+                     9: self.create_histogram_flow}
         self.menu_names = {1: "List movies",
                            2: "Add movie",
                            3: "Delete movie",
@@ -34,7 +36,8 @@ class CLI:
                            5: "Stats",
                            6: "Random movie",
                            7: "Search movie",
-                           8: "Movies sorted by rating"}
+                           8: "Movies sorted by rating",
+                           9: "Create ratings histogram"}
         self.menu_len = len(self.menu)
         self.print_options()
 
@@ -115,6 +118,13 @@ class CLI:
         print()
         for movie in sorted_movies:
             print(f"{movie}: {movies[movie]}")
+
+    @staticmethod
+    def create_histogram_flow():
+        """Create a histogram of the rating of the movies."""
+        destination = input("Enter a file name for the histogram output: ")
+        histogram_ratings(destination)
+        print(f"\nHistogram saved to: data/{destination}.png")
 
     def print_options(self):
         """Print the options menu to stdout."""

@@ -1,4 +1,7 @@
 # Methods to receive basic analytics about the movie database
+import numpy as np
+import matplotlib.pyplot as plt
+
 from data.movies import movies
 
 
@@ -38,8 +41,19 @@ def get_min_rated_movie():
     return worst_movies, min_rating
 
 
+def histogram_ratings(name: str = 'movie_ratings'):
+    bins = np.arange(1, 10.5, 0.5)
+    plt.hist(movies.values(), range=(1,10), bins=bins, color='darkorchid', linewidth=0.33)
+    plt.title('Distribution of Movie Ratings')
+    plt.xlabel('Movie Rating (1-10)')
+    plt.ylabel('Occurrence')
+    plt.grid(True, linestyle='--', alpha=0.3)
+    plt.savefig(f"data/{name}.png")
+
+
 if __name__ == '__main__':
-    get_movies_by_rating()
+    histogram_ratings()
+    # get_movies_by_rating()
     # calculate_average_rating()
     # calculate_median_rating()
     # get_max_rated_movies(3)
