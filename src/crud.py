@@ -9,51 +9,42 @@ def list_movies() -> None:
         print(f"{movie}: {rating}")
 
 
-def find_movie_by_name(part_of_name: str):
-    """Ask the user to enter a part of a movie name, and then search all the movies in the database
-    and prints all the movies that matched the user’s query, along with the rating.
-    NOTE: the search should be case-insensitive.
-
-    EXAMPLE:
-    Enter part of movie name: the
-    The Shawshank Redemption, 9.5
-    The Room, 3.6
-    """
-    found_movies = [key for key in movies.keys() if part_of_name in key]
-    if found_movies:
-        print(found_movies)
-    else:
-        print('Not found.')
+def find_movie_by_full_title(title: str) -> tuple[str, str]:
+    return title, movies.get(title, '')
 
 
-def find_movie_by_index(idx):
+def find_movies_by_title_part(part_of_name: str) -> list:
+    """Search all the movies in the database that matched the user’s query, along with the rating.
+    The search is case-insensitive."""
+    query = part_of_name.lower()
+    return [key for key in movies.keys() if query in key.lower()]
+
+
+def find_movie_by_index(idx) -> str:
+    """Get a movie by its constructed index."""
     movie = list(movies.keys())[idx]
     return movie
 
 
 def add_movie(movie: str, rating: float) -> None:
-    # add a movie to the db
+    """Add a movie to the db."""
     movies[movie] = rating
 
 
-def delete_movie(title: str) -> None:
-    # remove movie from db
-    """Ask the user to enter a movie name, and delete it.
-    If the movie doesn’t exist in the database, print an error message,
-    and then print the menu again as always."""
-    del movies[title]
+def delete_movie(title: str) -> bool:
+    """Remove movie from db if it exists."""
+    if title in movies.keys():
+        del movies[title]
+        return True
+    return False
 
 
-def update_movie(title: str, new_rating: float) -> None:
-    # update the rating of a movie
-    """Ask the user to enter a movie name, and then check if it exists.
-    If the movie doesn’t exist prints an error message.
-    If it exists, ask the user to enter a new rating,
-    and update the movie’s rating in the database.
-    There is no need to validate the input."""
-    movie = movies.get(title, None)
-    if movie:
+def update_movie_rating(title: str, new_rating: float) -> bool:
+    """Update the rating of a movie if it exists."""
+    if title in movies.keys():
         movies[title] = new_rating
+        return True
+    return False
 
 
 if __name__ == '__main__':

@@ -1,14 +1,6 @@
 # Methods to receive basic analytics about the movie database
 from data.movies import movies
 
-"""Stats
-Print statistics about the movies in the database:
-* Average rating in the database.
-* Median rating in the database. Read about median, and notice the difference between even number of movies and odd number of movies.
-* The best movie by rating. If there are multiple movies with the maximum rate, print all of them.
-* The worst movie by rating. If there are multiple movies with the minimum rate, print all of them.
-"""
-
 
 def get_movies_by_rating():
     """Sort movies in descending order by the rating."""
@@ -33,12 +25,14 @@ def calculate_median_rating():
 
 
 def get_max_rated_movie():
+    """Determine the movie(s) with the highest rating."""
     max_rating = max(movies.values())
     best_movies = [movie for movie, rating in movies.items() if rating == max_rating]
     return best_movies, max_rating
 
 
 def get_min_rated_movie():
+    """Determine the movie(s) with the lowest rating."""
     min_rating = min(movies.values())
     worst_movies = [movie for movie, rating in movies.items() if rating == min_rating]
     return worst_movies, min_rating
