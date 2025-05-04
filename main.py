@@ -19,8 +19,10 @@ from src.crud import (list_movies,
 
 class CLI:
     def __init__(self):
+        self._running = True
         print('********** My Movies Database **********')
-        self.menu = {1: self.list_movies_flow,
+        self.menu = {0: self.exit_flow,
+                     1: self.list_movies_flow,
                      2: self.add_movie_flow,
                      3: self.delete_movie_flow,
                      4: self.update_movie_flow,
@@ -29,7 +31,8 @@ class CLI:
                      7: self.search_movie_flow,
                      8: self.movies_by_rating_flow,
                      9: self.create_histogram_flow}
-        self.menu_names = {1: "List movies",
+        self.menu_names = {0: "Exit",
+                           1: "List movies",
                            2: "Add movie",
                            3: "Delete movie",
                            4: "Update movie",
@@ -39,7 +42,12 @@ class CLI:
                            8: "Movies sorted by rating",
                            9: "Create ratings histogram"}
         self.menu_len = len(self.menu)
+        self.msg_invalid_choice = "Invalid choice!\nPlease enter a number from the menu."
         self.print_options()
+
+    def exit_flow(self):
+        print('Thank you and goodbye!')
+        self._running = False
 
     @staticmethod
     def list_movies_flow():
@@ -131,18 +139,25 @@ class CLI:
         print('\nMenu:')
         for key, value in self.menu_names.items():
             print(f"{key}: {value}")
+        print()
 
     def run_cli(self):
         """Run the CLI program by calling for user input
         and use the function dispatcher pattern to call the corresponding method."""
-        print()
-        while True:
-            choice = int(input(f"Enter choice (1-{self.menu_len}): "))
-            if 1 <= choice <= self.menu_len:
-                self.menu[choice]()
-            input("\nPress enter to continue")
-            self.print_options()
-            print()
+        while self._running:
+            try:
+                choice = int(input(f"Enter choice (0-{self.menu_len-1}): "))
+                action = self.menu.get(choice)
+                if action:
+                    action()
+                else:
+                    print(self.msg_invalid_choice)
+            except ValueError:
+                print(self.msg_invalid_choice)
+
+            if self._running:
+                input("\nPress enter to continue")
+                self.print_options()
 
 
 def main():
