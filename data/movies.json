@@ -1,0 +1,102 @@
+{
+  "The Shawshank Redemption": {
+    "rating": 9.3,
+    "year": 1994,
+    "actors": [
+      "Tim Robbins",
+      "Morgan Freeman",
+      "Bob Gunton"
+    ],
+    "director": "Frank Darabont",
+    "$gross": 29332836
+  },
+  "Pulp Fiction": {
+    "rating": 8.9,
+    "year": 1994,
+    "actors": [
+      "John Travolta",
+      "Uma Thurman",
+      "Samuel L. Jackson"
+    ],
+    "director": "Quentin Tarantino",
+    "$gross": 213928762
+  },
+  "The Room": {
+    "rating": 3.6,
+    "year": 2003,
+    "actors": [
+      "Tommy Wiseau",
+      "Juliette Danielle",
+      "Greg Sestero"
+    ],
+    "director": "Tommy Wiseau",
+    "$gross": 5222190
+  },
+  "The Godfather": {
+    "rating": 9.2,
+    "year": 1972,
+    "actors": [
+      "Marlon Brando",
+      "Al Pacino",
+      "James Caan"
+    ],
+    "director": "Francis Ford Coppola",
+    "$gross": 250342198
+  },
+  "The Godfather: Part II": {
+    "rating": 9.0,
+    "year": 1974,
+    "actors": [
+      "Al Pacino",
+      "Robert De Niro",
+      "Robert Duvall"
+    ],
+    "director": "Francis Ford Coppola",
+    "$gross": 47983449
+  },
+  "The Dark Knight": {
+    "rating": 9.0,
+    "year": 2008,
+    "actors": [
+      "Christian Bale",
+      "Heath Ledger",
+      "Aaron Eckhart"
+    ],
+    "director": "Christopher Nolan",
+    "$gross": 1012558979
+  },
+  "Forrest Gump": {
+    "rating": 8.8,
+    "year": 1994,
+    "actors": [
+      "Tom Hanks",
+      "Robin Wright",
+      "Gary Sinise"
+    ],
+    "director": "Robert Zemeckis",
+    "$gross": 678226465
+  },
+  "Star Wars: Episode V": {
+    "rating": 8.7,
+    "year": 1980,
+    "actors": [
+      "Mark Hamill",
+      "Harrison Ford",
+      "Carrie Fisher"
+    ],
+    "director": "Irvin Kershner",
+    "$gross": 550016086
+  },
+  "Lord of the Rings: The Fellowship of the Ring": {
+    "rating": 9.5,
+    "year": 2001,
+    "actors": [
+      "Elijah Wood",
+      "Sean Astin",
+      "Sean Bean",
+      "Viggo Mortensen"
+    ],
+    "director": "Peter Jackson",
+    "$gross": 888483037
+  }
+}
