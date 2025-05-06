@@ -8,7 +8,7 @@
       "Bob Gunton"
     ],
     "director": "Frank Darabont",
-    "$gross": 29332836
+    "gross": 29332836
   },
   "Pulp Fiction": {
     "rating": 8.9,
@@ -19,7 +19,7 @@
       "Samuel L. Jackson"
     ],
     "director": "Quentin Tarantino",
-    "$gross": 213928762
+    "gross": 213928762
   },
   "The Room": {
     "rating": 3.6,
@@ -30,7 +30,7 @@
       "Greg Sestero"
     ],
     "director": "Tommy Wiseau",
-    "$gross": 5222190
+    "gross": 5222190
   },
   "The Godfather": {
     "rating": 9.2,
@@ -41,7 +41,7 @@
       "James Caan"
     ],
     "director": "Francis Ford Coppola",
-    "$gross": 250342198
+    "gross": 250342198
   },
   "The Godfather: Part II": {
     "rating": 9.0,
@@ -52,7 +52,7 @@
       "Robert Duvall"
     ],
     "director": "Francis Ford Coppola",
-    "$gross": 47983449
+    "gross": 47983449
   },
   "The Dark Knight": {
     "rating": 9.0,
@@ -63,7 +63,7 @@
       "Aaron Eckhart"
     ],
     "director": "Christopher Nolan",
-    "$gross": 1012558979
+    "gross": 1012558979
   },
   "Forrest Gump": {
     "rating": 8.8,
@@ -74,7 +74,7 @@
       "Gary Sinise"
     ],
     "director": "Robert Zemeckis",
-    "$gross": 678226465
+    "gross": 678226465
   },
   "Star Wars: Episode V": {
     "rating": 8.7,
@@ -85,7 +85,7 @@
       "Carrie Fisher"
     ],
     "director": "Irvin Kershner",
-    "$gross": 550016086
+    "gross": 550016086
   },
   "Lord of the Rings: The Fellowship of the Ring": {
     "rating": 9.5,
@@ -97,6 +97,6 @@
       "Viggo Mortensen"
     ],
     "director": "Peter Jackson",
-    "$gross": 888483037
+    "gross": 888483037
   }
 }
