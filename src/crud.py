@@ -88,7 +88,7 @@ def update_movie_info(movies: dict, title: str, new_info: dict = None) -> bool:
     if new_info is None:
         new_info = {}
     if title in movies.keys():
-        _info_to_update = {key: value for key, value in new_info.items() if key in movies[title].keys()}
+        _info_to_update = {key: value for key, value in new_info.items() if key in TEMPLATE.keys()}
         _info_to_update = {key: value for key, value in _info_to_update.items() if
                            type(movies[title][key]) == type(value)}
         for _info_key, _info_value in _info_to_update.items():

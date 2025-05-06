@@ -1,5 +1,6 @@
 # Run the CLI to interact with the movie database
 from random import randint
+from ast import literal_eval
 
 from src.analytics import (calculate_median_rating,
                            calculate_average_rating,
@@ -52,7 +53,7 @@ class CLI:
         self._running = False
 
     @staticmethod
-    def _query_additional_movie_info(key_value=False) -> dict:
+    def _query_additional_movie_info(key_is_value=False) -> dict:
         """Option to ask the user to enter
         additional information about the movie.
 
@@ -61,15 +62,17 @@ class CLI:
         _ask_more_input = True
         info_dict = {}
         _options = {key for key in TEMPLATE.keys() if key not in ['rating', 'year']}
+        print("\n[optional] Query additional information about your movie"
+              "\nPress ENTER to skip, type 'help' to see options")
         while _ask_more_input:
-            key = input('\n(ENTER to skip, help to see options)\nInformation key : ')
+            key = input('Additional information key: ')
             if key == '':
                 _ask_more_input = False
             elif key == 'help':
                 for _opt in _options:
                     print(f'\t {_opt}')
             else:
-                value = key if key_value else input('Information value: ')
+                value = key if key_is_value else literal_eval(input('Additional information value: '))
                 info_dict[key] = value
         print()
         return info_dict
@@ -77,7 +80,7 @@ class CLI:
     def list_movies_flow(self):
         """Lists all the movies in the database with year and rating.
         Optionally, show requested details."""
-        info_list = list(self._query_additional_movie_info(key_value=True).keys())
+        info_list = list(self._query_additional_movie_info(key_is_value=True).keys())
         list_movies(self.movies, info_list)
 
     def add_movie_flow(self):
