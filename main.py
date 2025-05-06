@@ -5,7 +5,7 @@ from src.analytics import (calculate_median_rating,
                            calculate_average_rating,
                            get_max_rated_movie,
                            get_min_rated_movie,
-                           get_movies_by_rating,
+                           sort_movies,
                            histogram_ratings)
 from src.crud import (load_movies_json,
                       list_movies,
@@ -94,7 +94,7 @@ class CLI:
     def delete_movie_flow(self):
         """Deletes a movie from the database."""
         title = input("Enter movie title to delete: ")
-        res = delete_movie(title)
+        res = delete_movie(self.movies, title)
         if res:
             print(f"Movie {title} successfully deleted.")
         else:
@@ -145,7 +145,7 @@ class CLI:
 
     def movies_by_rating_flow(self):
         """Print all movies sorted by rating"""
-        sorted_movies = get_movies_by_rating(self.movies)
+        sorted_movies = sort_movies(self.movies)
         print()
         for movie in sorted_movies:
             print(f"{movie} ({self.movies[movie]['year']}), {self.movies[movie]['rating']}")
@@ -153,6 +153,8 @@ class CLI:
     def create_histogram_flow(self):
         """Create a histogram of the rating of the movies."""
         destination = input("Enter a file name for the histogram output: ")
+        if destination == '':
+            destination = 'movie_ratings.png'
         histogram_ratings(self.movies, destination)
         print(f"\nHistogram saved to: data/{destination}.png")
 
