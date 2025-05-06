@@ -1,20 +1,21 @@
 # Run the CLI to interact with the movie database
 from random import randint
 
-from data.movies import movies
 from src.analytics import (calculate_median_rating,
                            calculate_average_rating,
                            get_max_rated_movie,
                            get_min_rated_movie,
                            get_movies_by_rating,
                            histogram_ratings)
-from src.crud import (list_movies,
+from src.crud import (load_movies_json,
+                      list_movies,
                       find_movie_by_index,
                       find_movie_by_full_title,
                       find_movies_by_title_part,
                       add_movie,
                       delete_movie,
-                      update_movie_rating)
+                      update_movie_info,
+                      TEMPLATE)
 
 
 class CLI:
@@ -42,6 +43,7 @@ class CLI:
                            8: "Movies sorted by rating",
                            9: "Create ratings histogram"}
         self.menu_len = len(self.menu)
+        self.movies = load_movies_json(db_path='data/movies.json')
         self.msg_invalid_choice = "Invalid choice!\nPlease enter a number from the menu."
         self.print_options()
 
@@ -50,20 +52,46 @@ class CLI:
         self._running = False
 
     @staticmethod
-    def list_movies_flow():
-        """Lists all the movies in the database."""
-        list_movies()
+    def _query_additional_movie_info(key_value=False) -> dict:
+        """Option to ask the user to enter
+        additional information about the movie.
 
-    @staticmethod
-    def add_movie_flow():
-        """Adds a movie to the database."""
+        :returns: additional movie information as dict
+        """
+        _ask_more_input = True
+        info_dict = {}
+        _options = {key for key in TEMPLATE.keys() if key not in ['rating', 'year']}
+        while _ask_more_input:
+            key = input('\n(ENTER to skip, help to see options)\nInformation key : ')
+            if key == '':
+                _ask_more_input = False
+            elif key == 'help':
+                for _opt in _options:
+                    print(f'\t {_opt}')
+            else:
+                value = key if key_value else input('Information value: ')
+                info_dict[key] = value
+        print()
+        return info_dict
+
+    def list_movies_flow(self):
+        """Lists all the movies in the database with year and rating.
+        Optionally, show requested details."""
+        info_list = list(self._query_additional_movie_info(key_value=True).keys())
+        list_movies(self.movies, info_list)
+
+    def add_movie_flow(self):
+        """Adds a movie to the database. It needs to have a release year and rating
+        and optionally queries for key value pairs to add.
+        Acceptance of specific keys & values is handled in the CRUD module."""
         title = input("Enter movie title: ")
         rating = float(input("Enter rating (0-10): "))
-        add_movie(title, rating)
+        year = int(input("Enter release year: "))
+        info_dict = self._query_additional_movie_info()
+        add_movie(self.movies, title, rating, year, info_dict)
         print(f"Movie {title} successfully added.")
 
-    @staticmethod
-    def delete_movie_flow():
+    def delete_movie_flow(self):
         """Deletes a movie from the database."""
         title = input("Enter movie title to delete: ")
         res = delete_movie(title)
@@ -72,66 +100,60 @@ class CLI:
         else:
             print(f"Movie '{title}' doesn't exist!.")
 
-    @staticmethod
-    def update_movie_flow():
+    def update_movie_flow(self):
         """Update the rating of a movie.
         Case-sensitive and full movie name matching."""
         title = input("Enter the movie's title to update: ")
-        _, rating = find_movie_by_full_title(title)
+        _, rating = find_movie_by_full_title(self.movies, title)
         if rating:
-            new_rating = float(input(f"Enter the new rating for {title} (0-10): "))
-            _ = update_movie_rating(title, new_rating)
+            info_dict = self._query_additional_movie_info()
+            _ = update_movie_info(self.movies, title, info_dict)
             print(f"Movie '{title}' successfully updated!")
         else:
             print(f"Movie '{title}' doesn't exist!.")
 
-    @staticmethod
-    def stats_flow():
+    def stats_flow(self):
         """Print a formatted overview of database statistics to stdout.
         Average, median, best and worst ratings."""
-        print(f"\nAverage rating: {calculate_average_rating()}")
-        print(f"Median rating: {calculate_median_rating()}")
-        best_movies, best_rating = get_max_rated_movie()
+        print(f"\nAverage rating: {calculate_average_rating(self.movies)}")
+        print(f"Median rating: {calculate_median_rating(self.movies)}")
+        best_movies, best_rating = get_max_rated_movie(self.movies)
         print(f"Best movie(s): {best_movies[0]}, {best_rating}")
         for movie in range(1, len(best_movies)):
             print(f"\t\t\t   {best_movies[movie]}, {best_rating}")
-        worst_movies, worst_rating = get_min_rated_movie()
+        worst_movies, worst_rating = get_min_rated_movie(self.movies)
         print(f"Worst movie(s): {worst_movies[0]}, {worst_rating}")
         for movie in range(1, len(worst_movies)):
             print(f"\t\t\t\t{worst_movies[movie]}, {worst_rating}")
 
-    @staticmethod
-    def random_movie_flow():
+    def random_movie_flow(self):
         """Select a random movie for the user to watch tonight."""
-        random_pick = randint(0, len(movies))
-        movie = find_movie_by_index(random_pick)
-        print(f"\nYour movie for tonight: {movie}, it's rated {movies[movie]}")
+        random_pick = randint(0, len(self.movies))
+        movie = find_movie_by_index(self.movies, random_pick)
+        print(f"\nYour movie for tonight: {movie}, it's rated {self.movies[movie]['rating']}")
 
-    @staticmethod
-    def search_movie_flow():
+    def search_movie_flow(self):
         """Print all movies matching the search criteria provided by the user.
         The search is case-insensitive."""
         part_of_movie_name = input("Enter a (part of) movie title to search: ")
-        matching_movies = find_movies_by_title_part(part_of_movie_name)
+        matching_movies = find_movies_by_title_part(self.movies, part_of_movie_name)
         if matching_movies:
             for movie in matching_movies:
-                print(f"{movie}, {movies[movie]}")
+                print(f"{movie} ({self.movies[movie]['year']}), {self.movies[movie]['rating']}")
         else:
             print(f"No movies matching '{part_of_movie_name}' found.")
 
-    @staticmethod
-    def movies_by_rating_flow():
+    def movies_by_rating_flow(self):
         """Print all movies sorted by rating"""
-        sorted_movies = get_movies_by_rating()
+        sorted_movies = get_movies_by_rating(self.movies)
         print()
         for movie in sorted_movies:
-            print(f"{movie}: {movies[movie]}")
+            print(f"{movie} ({self.movies[movie]['year']}), {self.movies[movie]['rating']}")
 
-    @staticmethod
-    def create_histogram_flow():
+    def create_histogram_flow(self):
         """Create a histogram of the rating of the movies."""
         destination = input("Enter a file name for the histogram output: ")
-        histogram_ratings(destination)
+        histogram_ratings(self.movies, destination)
         print(f"\nHistogram saved to: data/{destination}.png")
 
     def print_options(self):
