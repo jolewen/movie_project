@@ -1,6 +1,6 @@
 """Run the CLI to interact with the movie database"""
-from src.CLI import CLI
-from src.MovieManager import MovieManager
+from src.cli import CLI
+from src.movie_manager import MovieManager
 
 
 def main():

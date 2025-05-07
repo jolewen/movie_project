@@ -1,3 +1,4 @@
+"""MovieManager - interaction with the movie database"""
 import json
 
 import matplotlib.pyplot as plt
@@ -24,7 +25,7 @@ class MovieManager:
     @staticmethod
     def _load_movies_json(db_path: str = '../data/movies.json') -> dict:
         """Read movie data from json file, i.e. database."""
-        with open(db_path, 'r') as json_file:
+        with open(db_path, 'r', encoding='utf-8') as json_file:
             movie_data = json.load(json_file)
         return movie_data
 
@@ -70,9 +71,10 @@ class MovieManager:
                   rating: float,
                   year: int,
                   addition_info: dict = None) -> None:
-        """Add a movie to the db. To be identifiable it needs to have rating and release year.
-        If there is more information provided than rating and release year,
-        put said info into the db, too - if valid, i.e. templated.
+        """Add a movie to the db. To be identifiable it needs to have
+        rating and release year. If there is more information provided
+        than rating and release year, put said info into the db, too
+        - if valid, i.e. templated.
         """
         if addition_info is None:
             addition_info = {}
@@ -97,11 +99,11 @@ class MovieManager:
         """
         if new_info is None:
             new_info = {}
-        if title in self.movies.keys():
+        if title in self.movies:
             _update_info = {key: value for key, value in new_info.items()
                                if key in self.template.keys()}
             _update_info = {key: value for key, value in _update_info.items()
-                            if type(self.movies[title][key]) == type(value)}
+                            if isinstance(self.movies[title][key], type(value))}
             for _info_key, _info_value in _update_info.items():
                 self.movies[title][_info_key] = _info_value
             return True
@@ -122,7 +124,7 @@ class MovieManager:
         sorted_movies = sorted(self.movies.items(),
                                key=lambda item: item[1][order_key],
                                reverse=True)
-        sorted_movies = {key: value for key, value in sorted_movies}
+        sorted_movies = dict(sorted_movies)
         return sorted_movies
 
     def calculate_average_rating(self):
@@ -134,13 +136,11 @@ class MovieManager:
         """Calculate the median rating of a movie."""
         sorted_movies = self.sort_movies(order_key='rating')
         sorted_info = [item['rating'] for movie, item in sorted_movies.items()]
-        n = len(sorted_info)
-        mid = n // 2
-
-        if n % 2 == 1:
+        data_length = len(sorted_info)
+        mid = data_length // 2
+        if data_length % 2 == 1:
             return sorted_info[mid]
-        else:
-            return (sorted_info[mid - 1] + sorted_info[mid]) / 2
+        return (sorted_info[mid - 1] + sorted_info[mid]) / 2
 
     def get_max_rated_movie(self):
         """Determine the movie(s) with the highest rating."""
@@ -157,6 +157,8 @@ class MovieManager:
         return worst_rated_movies, min_rating
 
     def histogram_ratings(self, name: str = 'movie_ratings'):
+        """Create a rating histogram
+        and save it as .png under the given name."""
         bins = np.arange(1, 10.5, 0.5)
         ratings = [item['rating'] for item in self.movies.values()]
         plt.hist(ratings,
