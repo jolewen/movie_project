@@ -1,7 +1,8 @@
+"""The user interface in for of a command line tool."""
 from ast import literal_eval
 from random import randint
 
-from src.MovieManager import MovieManager
+from src.movie_manager import MovieManager
 
 
 class CLI:
@@ -43,6 +44,7 @@ class CLI:
         print()
 
     def exit_flow(self):
+        """Exit the user interface."""
         print('Thank you and goodbye!')
         self._running = False
 
