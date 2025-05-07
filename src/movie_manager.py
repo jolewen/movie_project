@@ -2,7 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from movie_storage import MovieStorage
+from src.movie_storage import MovieStorage
 
 
 class MovieManager(MovieStorage):
