@@ -1,18 +1,18 @@
 """MovieManager - interaction with the movie database"""
-import json
-
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+
+from movie_storage import MovieStorage
 
 
-class MovieManager:
+class MovieManager(MovieStorage):
     """MovieManager - interaction with the movie "database" (data/movies.json).
     Contains methods meant to provide CRUD interactions.
     Additionally, holds basic analytical functionality.
     """
 
     def __init__(self, db_path='data/movies.json'):
-        self.db_path = db_path
+        super().__init__(db_path)
         self.template = {
             "rating": 0.1,
             "year": 0,
@@ -20,19 +20,12 @@ class MovieManager:
             "director": "",
             "gross": 0
         }
-        self.movies = self._load_movies_json(db_path=db_path)
-
-    @staticmethod
-    def _load_movies_json(db_path: str = '../data/movies.json') -> dict:
-        """Read movie data from json file, i.e. database."""
-        with open(db_path, 'r', encoding='utf-8') as json_file:
-            movie_data = json.load(json_file)
-        return movie_data
 
     @staticmethod
     def _print_requested_details(movie, info_list):
         """Print valid (i.e. templated) additional movie information."""
-        _movie_details_to_show = {value: movie[value] for value in info_list if movie.get(value)}
+        _movie_details_to_show = {value: movie[value] for value in info_list if
+                                  movie.get(value)}
         for key, value in _movie_details_to_show.items():
             print(f"{key}: {value}")
         if _movie_details_to_show:
@@ -66,34 +59,36 @@ class MovieManager:
         movie = list(self.movies.keys())[idx]
         return movie
 
-    def add_movie(self,
-                  title: str,
-                  rating: float,
-                  year: int,
-                  addition_info: dict = None) -> None:
+    def manage_add_movie(self,
+                         title: str,
+                         rating: float,
+                         year: int,
+                         addition_info: dict = None) -> None:
         """Add a movie to the db. To be identifiable it needs to have
         rating and release year. If there is more information provided
         than rating and release year, put said info into the db, too
         - if valid, i.e. templated.
         """
+
         if addition_info is None:
             addition_info = {}
-        movie_info = {key: value for key, value in self.template.items()
-                      if key not in ['rating', 'year']}
-        movie_info['rating'] = rating
-        movie_info['year'] = year
-        for key, value in addition_info.items():
-            movie_info[key] = value
-        self.movies[title] = movie_info
+        if title not in self.movies:
+            new_movie_info = {key: value for key, value in self.template.items()
+                              if key not in ['rating', 'year']}
+            new_movie_info['rating'] = rating
+            new_movie_info['year'] = year
+            for key, value in addition_info.items():
+                new_movie_info[key] = value
+            self.add_movie(title, new_movie_info)
 
-    def delete_movie(self, title: str) -> bool:
+    def manage_delete_movie(self, title: str) -> bool:
         """Remove movie from db if it exists."""
         if title in self.movies.keys():
-            del self.movies[title]
+            self.delete_movie(title)
             return True
         return False
 
-    def update_movie_info(self, title: str, new_info: dict = None) -> bool:
+    def manage_update_movie(self, title: str, new_info: dict = None) -> bool:
         """Update the information of a movie if it exists.
         Cannot add information arbitrarily.
         """
@@ -101,7 +96,7 @@ class MovieManager:
             new_info = {}
         if title in self.movies:
             _update_info = {key: value for key, value in new_info.items()
-                               if key in self.template.keys()}
+                            if key in self.template.keys()}
             _update_info = {key: value for key, value in _update_info.items()
                             if isinstance(self.movies[title][key], type(value))}
             for _info_key, _info_value in _update_info.items():
@@ -183,7 +178,7 @@ if __name__ == '__main__':
                                   "Eric Idle",
                                   "Terry Jones",
                                   "Michael Palin"]}
-    movie_manager.add_movie(
+    movie_manager.manage_add_movie(
         title='Life of Brian',
         rating=8.0,
         year=1979,

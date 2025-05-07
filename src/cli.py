@@ -91,13 +91,13 @@ class CLI:
         rating = float(input("Enter rating (0-10): "))
         year = int(input("Enter release year: "))
         info_dict = self._query_additional_movie_info()
-        self.movie_manager.add_movie(title, rating, year, info_dict)
+        self.movie_manager.manage_add_movie(title, rating, year, info_dict)
         print(f"Movie {title} successfully added.")
 
     def delete_movie_flow(self):
         """Deletes a movie from the database."""
         title = input("Enter movie title to delete: ")
-        res = self.movie_manager.delete_movie(title)
+        res = self.movie_manager.manage_delete_movie(title)
         if res:
             print(f"Movie {title} successfully deleted.")
         else:
@@ -110,7 +110,7 @@ class CLI:
         _, rating = self.movie_manager.find_movie_by_full_title(title)
         if rating:
             info_dict = self._query_additional_movie_info()
-            _ = self.movie_manager.update_movie_info(title, info_dict)
+            _ = self.movie_manager.manage_update_movie(title, info_dict)
             print(f"Movie '{title}' successfully updated!")
         else:
             print(f"Movie '{title}' doesn't exist!.")
