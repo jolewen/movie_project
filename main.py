@@ -1,9 +1,10 @@
-# Run the CLI to interact with the movie database
+"""Run the CLI to interact with the movie database"""
 from src.CLI import CLI
 from src.MovieManager import MovieManager
 
 
 def main():
+    """Main function, instantiate and run the MovieManager & CLI program."""
     movie_manager = MovieManager()
     cli = CLI(movie_manager)
     cli.run_cli()

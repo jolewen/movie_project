@@ -5,6 +5,7 @@ from src.MovieManager import MovieManager
 
 
 class CLI:
+    """User Interface to handle I/O operations."""
     def __init__(self, movie_manager: MovieManager):
         self._running = True
         print('********** My Movies Database **********')
@@ -30,7 +31,8 @@ class CLI:
                            9: "Create ratings histogram"}
         self.menu_len = len(self.menu)
         self.movie_manager = movie_manager
-        self.msg_invalid_choice = "Invalid choice!\nPlease enter a number from the menu."
+        self.msg_invalid_choice = ("Invalid choice!"
+                                   "\nPlease enter a number from the menu.")
         self.print_options()
 
     def print_options(self):
@@ -53,7 +55,8 @@ class CLI:
         """
         _ask_more_input = True
         info_dict = {}
-        _options = {key for key in self.movie_manager.template.keys() if key not in ['rating', 'year']}
+        _options = {key for key in self.movie_manager.template.keys() if
+                    key not in ['rating', 'year']}
         print("\n[optional] Query additional information about your movie."
               "\nPress ENTER to confirm/skip, type 'help' to see options.")
         while _ask_more_input:
@@ -64,7 +67,8 @@ class CLI:
                 for _opt in _options:
                     print(f'\t {_opt}')
             else:
-                value = key if key_is_value else literal_eval(input('Additional information value: '))
+                value = key if key_is_value else literal_eval(
+                    input('Additional information value: '))
                 info_dict[key] = value
         print()
         return info_dict
@@ -72,11 +76,13 @@ class CLI:
     def list_movies_flow(self):
         """Lists all the movies in the database with year and rating.
         Optionally, show requested details."""
-        info_list = list(self._query_additional_movie_info(key_is_value=True).keys())
+        info_list = list(
+            self._query_additional_movie_info(key_is_value=True).keys())
         self.movie_manager.list_movies(info_list)
 
     def add_movie_flow(self):
-        """Adds a movie to the database. It needs to have a release year and rating
+        """Adds a movie to the database.
+        It needs to have a release year and rating
         and optionally queries for key value pairs to add.
         Acceptance of specific keys & values is handled in the CRUD module."""
         title = input("Enter movie title: ")
@@ -110,14 +116,18 @@ class CLI:
     def stats_flow(self):
         """Print a formatted overview of database statistics to stdout.
         Average, median, best and worst ratings."""
-        print(f"\nAverage rating: {self.movie_manager.calculate_average_rating()}")
-        print(f"Median rating: {self.movie_manager.calculate_median_rating()}")
+        print(f"\nAverage rating: "
+              f"{self.movie_manager.calculate_average_rating()}")
+        print(f"Median rating: "
+              f"{self.movie_manager.calculate_median_rating()}")
         best_movies, best_rating = self.movie_manager.get_max_rated_movie()
-        print(f"Best movie(s): {best_movies[0]}, {best_rating}")
+        print(f"Best movie(s): "
+              f"{best_movies[0]}, {best_rating}")
         for movie in range(1, len(best_movies)):
             print(f"\t\t\t   {best_movies[movie]}, {best_rating}")
         worst_movies, worst_rating = self.movie_manager.get_min_rated_movie()
-        print(f"Worst movie(s): {worst_movies[0]}, {worst_rating}")
+        print(f"Worst movie(s): "
+              f"{worst_movies[0]}, {worst_rating}")
         for movie in range(1, len(worst_movies)):
             print(f"\t\t\t\t{worst_movies[movie]}, {worst_rating}")
 
@@ -125,17 +135,21 @@ class CLI:
         """Select a random movie for the user to watch tonight."""
         random_pick = randint(0, len(self.movie_manager.movies))
         movie = self.movie_manager.find_movie_by_index(random_pick)
-        print(f"\nYour movie for tonight: {movie}, it's rated {self.movie_manager.movies[movie]['rating']}")
+        print(
+            f"\nYour movie for tonight: {movie}, "
+            f"it's rated {self.movie_manager.movies[movie]['rating']}")
 
     def search_movie_flow(self):
         """Print all movies matching the search criteria provided by the user.
         The search is case-insensitive."""
         part_of_movie_name = input("Enter a (part of) movie title to search: ")
-        matching_movies = self.movie_manager.find_movies_by_title_part(part_of_movie_name)
+        matching_movies = self.movie_manager.find_movies_by_title_part(
+            part_of_movie_name)
         if matching_movies:
             for movie in matching_movies:
                 print(
-                    f"{movie} ({self.movie_manager.movies[movie]['year']}), {self.movie_manager.movies[movie]['rating']}")
+                    f"{movie} ({self.movie_manager.movies[movie]['year']}), "
+                    f"{self.movie_manager.movies[movie]['rating']}")
         else:
             print(f"No movies matching '{part_of_movie_name}' found.")
 
@@ -144,7 +158,9 @@ class CLI:
         sorted_movies = self.movie_manager.sort_movies()
         print()
         for movie in sorted_movies:
-            print(f"{movie} ({self.movie_manager.movies[movie]['year']}), {self.movie_manager.movies[movie]['rating']}")
+            print(
+                f"{movie} ({self.movie_manager.movies[movie]['year']}), "
+                f"{self.movie_manager.movies[movie]['rating']}")
 
     def create_histogram_flow(self):
         """Create a histogram of the rating of the movies."""
@@ -156,7 +172,8 @@ class CLI:
 
     def run_cli(self):
         """Run the CLI program by calling for user input
-        and use the function dispatcher pattern to call the corresponding method."""
+        and use the function dispatcher pattern
+        to call the corresponding methods."""
         while self._running:
             try:
                 choice = int(input(f"Enter choice (0-{self.menu_len - 1}): "))

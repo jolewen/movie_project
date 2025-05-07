@@ -55,8 +55,8 @@ class MovieManager:
         return title, self.movies.get(title, '')
 
     def find_movies_by_title_part(self, part_of_name: str) -> list:
-        """Search all the movies in the database that matched the user’s query, along with the rating.
-        The search is case-insensitive."""
+        """Search all the movies in the database that matched the user’s query,
+        along with the rating. The search is case-insensitive."""
         query = part_of_name.lower()
         return [key for key in self.movies.keys() if query in key.lower()]
 
@@ -65,14 +65,19 @@ class MovieManager:
         movie = list(self.movies.keys())[idx]
         return movie
 
-    def add_movie(self, title: str, rating: float, year: int, addition_info: dict = None) -> None:
+    def add_movie(self,
+                  title: str,
+                  rating: float,
+                  year: int,
+                  addition_info: dict = None) -> None:
         """Add a movie to the db. To be identifiable it needs to have rating and release year.
         If there is more information provided than rating and release year,
         put said info into the db, too - if valid, i.e. templated.
         """
         if addition_info is None:
             addition_info = {}
-        movie_info = {key: value for key, value in self.template.items() if key not in ['rating', 'year']}
+        movie_info = {key: value for key, value in self.template.items()
+                      if key not in ['rating', 'year']}
         movie_info['rating'] = rating
         movie_info['year'] = year
         for key, value in addition_info.items():
@@ -93,10 +98,11 @@ class MovieManager:
         if new_info is None:
             new_info = {}
         if title in self.movies.keys():
-            _info_to_update = {key: value for key, value in new_info.items() if key in self.template.keys()}
-            _info_to_update = {key: value for key, value in _info_to_update.items() if
-                               type(self.movies[title][key]) == type(value)}
-            for _info_key, _info_value in _info_to_update.items():
+            _update_info = {key: value for key, value in new_info.items()
+                               if key in self.template.keys()}
+            _update_info = {key: value for key, value in _update_info.items()
+                            if type(self.movies[title][key]) == type(value)}
+            for _info_key, _info_value in _update_info.items():
                 self.movies[title][_info_key] = _info_value
             return True
         return False
@@ -108,47 +114,56 @@ class MovieManager:
 
         :param order_key: optionally order by specific key, default is 'rating'
 
-        :returns: sorted list of tuples, which contain movie title and the info dict
+        :returns: sorted list of tuples,
+                  which contain movie title and the info dict
         """
         if order_key is None:
             order_key = 'rating'
-        sorted_movies = sorted(self.movies.items(), key=lambda item: item[1][order_key], reverse=True)
+        sorted_movies = sorted(self.movies.items(),
+                               key=lambda item: item[1][order_key],
+                               reverse=True)
         sorted_movies = {key: value for key, value in sorted_movies}
         return sorted_movies
 
     def calculate_average_rating(self):
         """Calculate the average rating of a movie."""
-        movie_ratings = [info_item['rating'] for info_item in self.movies.values()]
-        return round(sum(movie_ratings) / len(self.movies), 1)
+        ratings = [info_item['rating'] for info_item in self.movies.values()]
+        return round(sum(ratings) / len(self.movies), 1)
 
     def calculate_median_rating(self):
         """Calculate the median rating of a movie."""
         sorted_movies = self.sort_movies(order_key='rating')
-        sorted_values = [item['rating'] for movie, item in sorted_movies.items()]
-        n = len(sorted_values)
+        sorted_info = [item['rating'] for movie, item in sorted_movies.items()]
+        n = len(sorted_info)
         mid = n // 2
 
         if n % 2 == 1:
-            return sorted_values[mid]
+            return sorted_info[mid]
         else:
-            return (sorted_values[mid - 1] + sorted_values[mid]) / 2
+            return (sorted_info[mid - 1] + sorted_info[mid]) / 2
 
     def get_max_rated_movie(self):
         """Determine the movie(s) with the highest rating."""
         max_rating = max([item['rating'] for item in self.movies.values()])
-        best_rated_movies = [movie for movie, item in self.movies.items() if item['rating'] == max_rating]
+        best_rated_movies = [movie for movie, item in self.movies.items()
+                             if item['rating'] == max_rating]
         return best_rated_movies, max_rating
 
     def get_min_rated_movie(self):
         """Determine the movie(s) with the lowest rating."""
         min_rating = min([item['rating'] for item in self.movies.values()])
-        worst_rated_movies = [movie for movie, item in self.movies.items() if item['rating'] == min_rating]
+        worst_rated_movies = [movie for movie, item in self.movies.items()
+                              if item['rating'] == min_rating]
         return worst_rated_movies, min_rating
 
     def histogram_ratings(self, name: str = 'movie_ratings'):
         bins = np.arange(1, 10.5, 0.5)
         ratings = [item['rating'] for item in self.movies.values()]
-        plt.hist(ratings, range=(1, 10), bins=bins, color='darkorchid', linewidth=0.33)
+        plt.hist(ratings,
+                 range=(1, 10),
+                 bins=bins,
+                 color='darkorchid',
+                 linewidth=0.33)
         plt.title('Distribution of Movie Ratings')
         plt.xlabel('Movie Rating (1-10)')
         plt.ylabel('Occurrence')
