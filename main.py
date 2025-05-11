@@ -46,13 +46,15 @@ class CLI:
         """Lists all the movies in the database."""
         list_movies()
 
-    @staticmethod
-    def add_movie_flow():
+    def add_movie_flow(self):
         """Adds a movie to the database."""
         title = input("Enter movie title: ")
         rating = float(input("Enter rating (0-10): "))
-        add_movie(title, rating)
-        print(f"Movie {title} successfully added.")
+        res = add_movie(title, rating)
+        if res:
+            print(f"Movie '{title}' successfully added.")
+        else:
+            print(f"Movie '{title}' exists & was not added.")
 
     @staticmethod
     def delete_movie_flow():

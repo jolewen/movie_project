@@ -26,9 +26,12 @@ def find_movie_by_index(idx) -> str:
     return movie
 
 
-def add_movie(movie: str, rating: float) -> None:
+def add_movie(movie: str, rating: float) -> bool:
     """Add a movie to the db."""
-    movies[movie] = rating
+    if movie not in movies.keys():
+        movies[movie] = rating
+        return True
+    return False
 
 
 def delete_movie(title: str) -> bool:
